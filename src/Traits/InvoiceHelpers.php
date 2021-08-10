@@ -215,7 +215,14 @@ trait InvoiceHelpers
     public function getLogo()
     {
         $type   = pathinfo($this->logo, PATHINFO_EXTENSION);
-        $data   = file_get_contents($this->logo);
+        $arrContextOptions=array(
+            "ssl"=>array(
+                'allow_self_signed' => true,
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+            ),
+        );
+        $data   = file_get_contents($this->logo, false, stream_context_create($arrContextOptions));
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
         return $base64;
